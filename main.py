@@ -41,14 +41,18 @@ def get_slotmachine_spin(cols, rows, symbols):
     return columns
 
 
+def check_winnings(columns, lines, bet, values):
+    for line in range(lines):
+        
+
 def print_slotmachine(columns):
-    for row in range(len[columns[0]]):
+    for row in range(len(columns[0])):
         for i, column in enumerate(columns):
             if i != len(column) - 1:
-                print(column[row], "|")
+                print(column[row], end=" | ")
             else:
-                print(column[row])
-            
+                print(column[row], end="")
+        print()
 
 
 def deposit():
@@ -106,6 +110,8 @@ def main():
     print(f"Total bet is : ${total_bet}, where you bet ${bet} on each of the {lines}.")
 
     slots = get_slotmachine_spin(ROWS, COLS, symbol_count)
+    print_slotmachine(slots)
+
 
 if __name__ == "__main__":
     main()
