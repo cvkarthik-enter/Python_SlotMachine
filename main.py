@@ -17,6 +17,12 @@ symbol_count = {
     "C": 6,
     "D": 8
 }
+symbol_value = {
+    "A": 5,
+    "B": 4,
+    "C": 3,
+    "D": 2
+}
 
 
 def get_slotmachine_spin(cols, rows, symbols):
@@ -29,7 +35,7 @@ def get_slotmachine_spin(cols, rows, symbols):
 
     # generating the columns. This depends on rows, symbol_count and number of columns
     columns = []
-    for _ in range(columns):
+    for _ in range(cols):
         column = []
         current_symbols = all_symbols[:]
         for _ in range(rows):
@@ -42,8 +48,20 @@ def get_slotmachine_spin(cols, rows, symbols):
 
 
 def check_winnings(columns, lines, bet, values):
+    winnings = 0
+    winning_lines = []
     for line in range(lines):
-        
+        symbol = columns[0][line]
+        for column in columns:
+            symbol_to_check = column[line]
+            if symbol != symbol_to_check:
+                break
+        else:
+            winnings += values[symbol] * bet
+            winning_lines.append(line + 1)
+
+    return winnings, winning_lines
+
 
 def print_slotmachine(columns):
     for row in range(len(columns[0])):
@@ -97,8 +115,7 @@ def get_bet():
     return bets
 
 
-def main():
-    balance = deposit()
+def spin(balance):
     lines = get_number_of_lines()
     while True:
         bet = get_bet()
@@ -111,6 +128,23 @@ def main():
 
     slots = get_slotmachine_spin(ROWS, COLS, symbol_count)
     print_slotmachine(slots)
+    winnings, winning_lines = check_winnings(slots, lines, bet, symbol_value)
+    print(f"You won ${winnings}")
+    print("You won on lines: ", *winning_lines)
+
+    return winnings - total_bet
+
+
+def main():
+    balance = deposit()
+    while True:
+        ans = input("Press enter to spin or Q/q to quit: ")
+        if ans.lower() == 'q':
+            break
+        balance += spin(balance)
+        print(f"You are left with ${balance}.")
+
+
 
 
 if __name__ == "__main__":
